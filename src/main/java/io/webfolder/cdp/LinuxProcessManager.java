@@ -1,17 +1,17 @@
 /**
  * cdp4j - Chrome DevTools Protocol for Java
  * Copyright © 2017 WebFolder OÜ (support@webfolder.io)
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -48,19 +48,19 @@ public class LinuxProcessManager extends ProcessManager {
     @Override
     public boolean kill() {
         ProcessBuilder builder = new ProcessBuilder("strings",
-                                                    "-a",
-                                                    "/proc/" + pid + "/cmdline");
+                "-a",
+                "/proc/" + pid + "/cmdline");
         try {
             Process process = builder.start();
             boolean ok = process.waitFor(5, SECONDS);
-            if ( ! ok ) {
+            if (!ok) {
                 return false;
             }
-            if ( process.exitValue() != 0 ) {
+            if (process.exitValue() != 0) {
                 return false;
             }
             String stdout = toString(process.getInputStream());
-            if ( ! stdout.contains("cdp4jId=" + cdp4jId) ) {
+            if (!stdout.contains("cdp4jId=" + cdp4jId)) {
                 return false;
             }
         } catch (Throwable e) {
@@ -69,8 +69,8 @@ public class LinuxProcessManager extends ProcessManager {
         try {
             Class<?> clazz = forName("java.lang.UNIXProcess");
             Method destroyProcess = clazz.getDeclaredMethod("destroyProcess",
-                                                                int.class,
-                                                                boolean.class);
+                    int.class,
+                    boolean.class);
             destroyProcess.setAccessible(true);
             boolean force = false;
             destroyProcess.invoke(null, pid, force);

@@ -1,17 +1,17 @@
 /**
  * cdp4j - Chrome DevTools Protocol for Java
  * Copyright © 2017 WebFolder OÜ (support@webfolder.io)
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -134,10 +134,10 @@ public class SessionFactory implements AutoCloseable {
     }
 
     public SessionFactory(
-                final String host,
-                final int port,
-                final CdpLoggerType loggerType,
-                final ExecutorService threadPool) {
+            final String host,
+            final int port,
+            final CdpLoggerType loggerType,
+            final ExecutorService threadPool) {
         this(host,
                 port,
                 DEFAULT_CONNECTION_TIMEOUT,
@@ -146,21 +146,21 @@ public class SessionFactory implements AutoCloseable {
     }
 
     public SessionFactory(
-                    final String host,
-                    final int port,
-                    final int connectionTimeout,
-                    final CdpLoggerType loggerType,
-                    final ExecutorService threadPool) {
-        this.host              = host;
-        this.port              = port;
+            final String host,
+            final int port,
+            final int connectionTimeout,
+            final CdpLoggerType loggerType,
+            final ExecutorService threadPool) {
+        this.host = host;
+        this.port = port;
         this.connectionTimeout = connectionTimeout;
-        this.factory           = new WebSocketFactory();
-        this.loggerFactory     = new CdpLoggerFactory();
-        this.threadPool        = threadPool;
-        this.log               = loggerFactory.getLogger("cdp4j.factory");
-        this.gson              = new GsonBuilder()
-                                    .disableHtmlEscaping()
-                                    .create();
+        this.factory = new WebSocketFactory();
+        this.loggerFactory = new CdpLoggerFactory();
+        this.threadPool = threadPool;
+        this.log = loggerFactory.getLogger("cdp4j.factory");
+        this.gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                .create();
         this.factory.setConnectionTimeout(this.connectionTimeout);
     }
 
@@ -185,19 +185,19 @@ public class SessionFactory implements AutoCloseable {
             }
             Target target = headlessSession.getCommand().getTarget();
             String targetId = target.createTarget("about:blank",
-                                                  DEFAULT_SCREEN_WIDTH,
-                                                  DEFAULT_SCREEN_HEIGHT,
-                                                  browserContextId, false);
+                    DEFAULT_SCREEN_WIDTH,
+                    DEFAULT_SCREEN_HEIGHT,
+                    browserContextId, false);
             Session session = connect(targetId);
             targets.put(session, targetId);
             return session;
         }
         String existingNewSessionId = null;
         for (SessionInfo info : list()) {
-            boolean page   = "page".equals(info.getType());
+            boolean page = "page".equals(info.getType());
             boolean newTab = "chrome://newtab/".equals(info.getUrl()) ||
-                                "chrome://welcome/".equals(info.getUrl()) ||
-                                info.getUrl().startsWith("chrome://welcome-win10");
+                    "chrome://welcome/".equals(info.getUrl()) ||
+                    info.getUrl().startsWith("chrome://welcome-win10");
             if (page && newTab) {
                 existingNewSessionId = info.getId();
                 break;
@@ -210,13 +210,13 @@ public class SessionFactory implements AutoCloseable {
                 break;
             }
         }
-        if ( existingNewSessionId != null && ! used ) {
+        if (existingNewSessionId != null && !used) {
             Session session = connect(existingNewSessionId);
             return session;
         } else {
             String createUrl = format("http://%s:%d/json/new", host, port);
-            Reader reader    = null;
-            URL    url       = null;
+            Reader reader = null;
+            URL url = null;
             try {
                 url = new URL(createUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -226,7 +226,7 @@ public class SessionFactory implements AutoCloseable {
                 String newSessionId = valueOf(map.get("id"));
                 Session newSession = connect(newSessionId);
                 return newSession;
-            } catch (IOException  e) {
+            } catch (IOException e) {
                 throw new CdpException(e);
             } finally {
                 if (reader != null) {
@@ -251,20 +251,20 @@ public class SessionFactory implements AutoCloseable {
         if (webSocketDebuggerUrl == null) {
             throw new CdpException("SessionId not found: " + sessionId);
         }
-        Reader    reader    = null;
-        Session   session   = null;
+        Reader reader = null;
+        Session session = null;
         WebSocket webSocket = null;
         try {
             Map<Integer, WSContext> contextList = new ConcurrentHashMap<>();
             List<EventListener<?>> eventListeners = new CopyOnWriteArrayList<>();
             webSocket = factory.createSocket(webSocketDebuggerUrl);
             WSAdapter adapter = new WSAdapter(gson, contextList, eventListeners,
-                                                    threadPool, loggerFactory.getLogger("cdp4j.ws.response"));
+                    threadPool, loggerFactory.getLogger("cdp4j.ws.response"));
             webSocket.addListener(adapter);
             webSocket.connect();
             webSocket.setAutoFlush(true);
             session = new Session(gson, sessionId, webSocket,
-                                    contextList, this, eventListeners, loggerFactory);
+                    contextList, this, eventListeners, loggerFactory);
             adapter.setSession(session);
             this.sessions.add(session);
             return session;
@@ -290,8 +290,8 @@ public class SessionFactory implements AutoCloseable {
      */
     public List<SessionInfo> list(int connectionTimeout) {
         String listSessions = format("http://%s:%d/json/list", host, port);
-        URL    url          = null;
-        Reader reader       = null;
+        URL url = null;
+        Reader reader = null;
         try {
             url = new URL(listSessions);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -326,18 +326,18 @@ public class SessionFactory implements AutoCloseable {
             }
         }
         String closeSession = format("http://%s:%d/json/close/%s", host, port, sessionId);
-        URL    url          = null;
-        Reader reader       = null;
+        URL url = null;
+        Reader reader = null;
         if (found) {
             try {
                 if (isHeadless()) {
                     boolean isHeadlessSession = session != null &&
-                                                    session.equals(headlessSession);
+                            session.equals(headlessSession);
                     if (isHeadlessSession) {
                         return;
                     }
                     String targetId = targets.get(session);
-                    if ( targetId != null && session.isConnected() ) {
+                    if (targetId != null && session.isConnected()) {
                         headlessSession.getCommand().getTarget().closeTarget(targetId);
                         targets.remove(session);
                     }
@@ -383,7 +383,7 @@ public class SessionFactory implements AutoCloseable {
         }
         for (Session session : sessions) {
             if (headless &&
-                        session.getId().equals(headlessSession.getId())) {
+                    session.getId().equals(headlessSession.getId())) {
                 continue;
             }
             try {
@@ -411,7 +411,7 @@ public class SessionFactory implements AutoCloseable {
                 break;
             }
         }
-        if ( ! found ) {
+        if (!found) {
             return;
         }
         if (isHeadless()) {
@@ -430,8 +430,8 @@ public class SessionFactory implements AutoCloseable {
             }
         } else {
             String closeSession = format("http://%s:%d/json/activate/%s", host, port, sessionId);
-            URL    url          = null;
-            Reader reader       = null;
+            URL url = null;
+            Reader reader = null;
             try {
                 url = new URL(closeSession);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -460,11 +460,11 @@ public class SessionFactory implements AutoCloseable {
             return headlessSession;
         }
         for (SessionInfo next : sessionInfos) {
-            if ( "about:blank".equals(next.getUrl()) &&
-                        next.getId() != null &&
-                        ! next.getId().trim().isEmpty() &&
-                        next.getWebSocketDebuggerUrl() != null &&
-                        ! next.getWebSocketDebuggerUrl().trim().isEmpty() ) {
+            if ("about:blank".equals(next.getUrl()) &&
+                    next.getId() != null &&
+                    !next.getId().trim().isEmpty() &&
+                    next.getWebSocketDebuggerUrl() != null &&
+                    !next.getWebSocketDebuggerUrl().trim().isEmpty()) {
                 headlessSession = connect(next.getId());
                 headless.compareAndSet(false, true);
                 return headlessSession;
@@ -494,8 +494,8 @@ public class SessionFactory implements AutoCloseable {
 
     protected Map<String, Object> getVersion() {
         String listSessions = format("http://%s:%d/json/version", host, port);
-        URL    url          = null;
-        Reader reader       = null;
+        URL url = null;
+        Reader reader = null;
         try {
             url = new URL(listSessions);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -532,9 +532,9 @@ public class SessionFactory implements AutoCloseable {
                 headlessSession = connectHeadless();
             }
             String browserContextId = headlessSession
-                                            .getCommand()
-                                            .getTarget()
-                                            .createBrowserContext();
+                    .getCommand()
+                    .getTarget()
+                    .createBrowserContext();
             browserContextList.add(browserContextId);
             return browserContextId;
         }
@@ -542,11 +542,11 @@ public class SessionFactory implements AutoCloseable {
     }
 
     public void disposeBrowserContext(final String browserContextId) {
-        if ( isHeadless() && headlessSession != null ) {
+        if (isHeadless() && headlessSession != null) {
             headlessSession
-                .getCommand()
-                .getTarget()
-                .disposeBrowserContext(browserContextId);
+                    .getCommand()
+                    .getTarget()
+                    .disposeBrowserContext(browserContextId);
             browserContextList.remove(browserContextId);
         }
     }

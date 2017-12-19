@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration packagingData="true">
 
-    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -9,14 +9,14 @@
         </layout>
     </appender>
 
-    <logger name="cdp4j.session"     level="INFO" />
-    <logger name="cdp4j.flow"        level="INFO" />
-    <logger name="cdp4j.factory"     level="INFO" />
-    <logger name="cdp4j.ws.request"  level="ERROR" />
-    <logger name="cdp4j.ws.response" level="ERROR" />
+    <logger name="cdp4j.session" level="INFO"/>
+    <logger name="cdp4j.flow" level="INFO"/>
+    <logger name="cdp4j.factory" level="INFO"/>
+    <logger name="cdp4j.ws.request" level="ERROR"/>
+    <logger name="cdp4j.ws.response" level="ERROR"/>
 
     <root level="info">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
     </root>
 
 </configuration>

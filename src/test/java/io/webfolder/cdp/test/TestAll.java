@@ -1,17 +1,17 @@
 /**
  * cdp4j - Chrome DevTools Protocol for Java
  * Copyright © 2017 WebFolder OÜ (support@webfolder.io)
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -210,11 +210,11 @@ public class TestAll {
         List<String> actuals = appender.getLogEntries();
 
         List<String> failedExpecteds = new ArrayList<>();
-        List<String>   failedActuals = new ArrayList<>();
+        List<String> failedActuals = new ArrayList<>();
 
         for (int i = 0; i < actuals.size(); i++) {
             String expected = i < expecteds.size() ? expecteds.get(i) : null;
-            String   actual = actuals.get(i);
+            String actual = actuals.get(i);
             String methodName = "";
             if (expected != null && expected.startsWith("invoked(")) {
                 methodName = expected.substring("invoked(".length(), expected.length() - 1);
@@ -227,13 +227,13 @@ public class TestAll {
                 System.out.println("[  FAILED  ] " + actual);
                 System.out.println("[ EXPECTED ] " + expected);
             }
-            if ( ! ok ) {
+            if (!ok) {
                 failedExpecteds.add(expected);
                 failedActuals.add(actual);
             }
         }
 
-        assertArrayEquals(failedExpecteds.toArray(new String[] { }), failedActuals.toArray(new String[] { }));
+        assertArrayEquals(failedExpecteds.toArray(new String[]{}), failedActuals.toArray(new String[]{}));
 
         assertEquals(expecteds.size(), actuals.size());
     }

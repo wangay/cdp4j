@@ -2,7 +2,7 @@
  * lines (18 sloc)  1.11 KB
  * Copyright (c) 2004-2017 QOS.ch
  * All rights reserved.
- * 
+ * <p>
  * Permission is hereby granted, free  of charge, to any person obtaining
  * a  copy  of this  software  and  associated  documentation files  (the
  * "Software"), to  deal in  the Software without  restriction, including
@@ -10,10 +10,10 @@
  * distribute,  sublicense, and/or sell  copies of  the Software,  and to
  * permit persons to whom the Software  is furnished to do so, subject to
  * the following conditions:
- * 
+ * <p>
  * The  above  copyright  notice  and  this permission  notice  shall  be
  * included in all copies or substantial portions of the Software.
- * 
+ * <p>
  * THE  SOFTWARE IS  PROVIDED  "AS  IS", WITHOUT  WARRANTY  OF ANY  KIND,
  * EXPRESS OR  IMPLIED, INCLUDING  BUT NOT LIMITED  TO THE  WARRANTIES OF
  * MERCHANTABILITY,    FITNESS    FOR    A   PARTICULAR    PURPOSE    AND
@@ -30,17 +30,18 @@ import java.util.Map;
 
 // contributors: lizongbo: proposed special treatment of array parameter values
 // Joern Huxhorn: pointed out double[] omission, suggested deep array copy
+
 /**
  * Formats messages according to very simple substitution rules. Substitutions
  * can be made 1, 2 or more arguments.
- *
+ * <p>
  * <p>
  * For example,
- *
+ * <p>
  * <pre>
  * MessageFormatter.format(&quot;Hi {}.&quot;, &quot;there&quot;)
  * </pre>
- *
+ * <p>
  * will return the string "Hi there.".
  * <p>
  * The {} pair is called the <em>formatting anchor</em>. It serves to designate
@@ -50,43 +51,43 @@ import java.util.Map;
  * In case your message contains the '{' or the '}' character, you do not have
  * to do anything special unless the '}' character immediately follows '{'. For
  * example,
- *
+ * <p>
  * <pre>
  * MessageFormatter.format(&quot;Set {1,2,3} is not equal to {}.&quot;, &quot;1,2&quot;);
  * </pre>
- *
+ * <p>
  * will return the string "Set {1,2,3} is not equal to 1,2.".
- *
+ * <p>
  * <p>
  * If for whatever reason you need to place the string "{}" in the message
  * without its <em>formatting anchor</em> meaning, then you need to escape the
  * '{' character with '\', that is the backslash character. Only the '{'
  * character should be escaped. There is no need to escape the '}' character.
  * For example,
- *
+ * <p>
  * <pre>
  * MessageFormatter.format(&quot;Set \\{} is not equal to {}.&quot;, &quot;1,2&quot;);
  * </pre>
- *
+ * <p>
  * will return the string "Set {} is not equal to 1,2.".
- *
+ * <p>
  * <p>
  * The escaping behavior just described can be overridden by escaping the escape
  * character '\'. Calling
- *
+ * <p>
  * <pre>
  * MessageFormatter.format(&quot;File name is C:\\\\{}.&quot;, &quot;file.zip&quot;);
  * </pre>
- *
+ * <p>
  * will return the string "File name is C:\file.zip".
- *
+ * <p>
  * <p>
  * The formatting conventions are different than those of {@link MessageFormat}
  * which ships with the Java platform. This is justified by the fact that
  * SLF4J's implementation is 10 times faster than that of {@link MessageFormat}.
  * This local performance difference is both measurable and significant in the
  * larger context of the complete logging processing chain.
- *
+ * <p>
  * <p>
  * See also {@link #format(String, Object)},
  * {@link #format(String, Object, Object)} and
@@ -106,49 +107,43 @@ class MessageFormatter {
      * parameter.
      * <p>
      * For example,
-     *
+     * <p>
      * <pre>
      * MessageFormatter.format(&quot;Hi {}.&quot;, &quot;there&quot;);
      * </pre>
-     *
+     * <p>
      * will return the string "Hi there.".
      * <p>
      *
-     * @param messagePattern
-     *          The message pattern which will be parsed and formatted
-     * @param arg
-     *          The argument to be substituted in place of the formatting anchor
+     * @param messagePattern The message pattern which will be parsed and formatted
+     * @param arg            The argument to be substituted in place of the formatting anchor
      * @return The formatted message
      */
     final public static FormattingTuple format(String messagePattern, Object arg) {
-        return arrayFormat(messagePattern, new Object[] { arg });
+        return arrayFormat(messagePattern, new Object[]{arg});
     }
 
     /**
-     *
      * Performs a two argument substitution for the 'messagePattern' passed as
      * parameter.
      * <p>
      * For example,
-     *
+     * <p>
      * <pre>
      * MessageFormatter.format(&quot;Hi {}. My name is {}.&quot;, &quot;Alice&quot;, &quot;Bob&quot;);
      * </pre>
-     *
+     * <p>
      * will return the string "Hi Alice. My name is Bob.".
      *
-     * @param messagePattern
-     *          The message pattern which will be parsed and formatted
-     * @param arg1
-     *          The argument to be substituted in place of the first formatting
-     *          anchor
-     * @param arg2
-     *          The argument to be substituted in place of the second formatting
-     *          anchor
+     * @param messagePattern The message pattern which will be parsed and formatted
+     * @param arg1           The argument to be substituted in place of the first formatting
+     *                       anchor
+     * @param arg2           The argument to be substituted in place of the second formatting
+     *                       anchor
      * @return The formatted message
      */
     final public static FormattingTuple format(final String messagePattern, Object arg1, Object arg2) {
-        return arrayFormat(messagePattern, new Object[] { arg1, arg2 });
+        return arrayFormat(messagePattern, new Object[]{arg1, arg2});
     }
 
 

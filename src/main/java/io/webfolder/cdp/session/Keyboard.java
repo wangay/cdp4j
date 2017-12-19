@@ -1,17 +1,17 @@
 /**
  * cdp4j - Chrome DevTools Protocol for Java
  * Copyright © 2017 WebFolder OÜ (support@webfolder.io)
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,9 +30,8 @@ public interface Keyboard extends Constant {
 
     /**
      * Use this method to simulate typing into an element, which may set its value.
-     * 
+     *
      * @param text character sequence to send to the element
-     * 
      * @return this
      */
     default Session sendKeys(String text) {
@@ -59,41 +58,41 @@ public interface Keyboard extends Constant {
 
     /**
      * Use this method to simulate typing <strong>TAB</strong> key.
-     * 
+     *
      * @return this
      */
     default Session sendTab() {
         getThis().logEntry("sendTab");
         Input input = getThis().getCommand().getInput();
         input.dispatchKeyEvent(KeyDown, null, null, null,
-                                null, null, null, "Tab",
-                                TAB, TAB, null, null, null, null);
+                null, null, null, "Tab",
+                TAB, TAB, null, null, null, null);
         input.dispatchKeyEvent(KeyUp, null, null, null,
-                                null, null, null, "Tab",
-                                TAB, TAB, null, null, null, null);
+                null, null, null, "Tab",
+                TAB, TAB, null, null, null, null);
         return getThis();
     }
 
     /**
      * Use this method to simulate typing <strong>ENTER</strong> key.
-     * 
+     *
      * @return this
      */
     default Session sendEnter() {
         getThis().logEntry("sendEnter");
         Input input = getThis().getCommand().getInput();
         input.dispatchKeyEvent(KeyDown, null, null, "\r",
-                                null, null, null, "Enter",
-                                ENTER, ENTER, null, null, null, null);
+                null, null, null, "Enter",
+                ENTER, ENTER, null, null, null, null);
         input.dispatchKeyEvent(KeyUp, null, null, null,
-                                null, null, null, "Enter",
-                                ENTER, ENTER, null, null, null, null);
+                null, null, null, "Enter",
+                ENTER, ENTER, null, null, null, null);
         return getThis();
     }
 
     /**
      * Use this method to simulate typing <strong>BACKSPACE</strong> key.
-     * 
+     *
      * @return this
      */
     default Session sendBackspace() {
@@ -103,7 +102,7 @@ public interface Keyboard extends Constant {
 
     /**
      * Use this method to simulate typing <strong>LEFT_ARROW</strong> key.
-     * 
+     *
      * @return this
      */
     default Session sendLeftArrow() {
@@ -113,7 +112,7 @@ public interface Keyboard extends Constant {
 
     /**
      * Use this method to simulate typing <strong>UP_ARROW</strong> key.
-     * 
+     *
      * @return this
      */
     default Session sendUpArrow() {
@@ -123,7 +122,7 @@ public interface Keyboard extends Constant {
 
     /**
      * Use this method to simulate typing <strong>RIGHT_ARROW</strong> key.
-     * 
+     *
      * @return this
      */
     default Session sendRightArrow() {
@@ -133,7 +132,7 @@ public interface Keyboard extends Constant {
 
     /**
      * Use this method to simulate typing <strong>DOWN_ARROW</strong> key.
-     * 
+     *
      * @return this
      */
     default Session sendDownArrow() {
@@ -143,7 +142,7 @@ public interface Keyboard extends Constant {
 
     /**
      * Use this method to simulate typing <strong>ESC</strong> key.
-     * 
+     *
      * @return this
      */
     default Session sendEsc() {
@@ -153,20 +152,20 @@ public interface Keyboard extends Constant {
 
     /**
      * Use this method to simulate typing unicode value of keyboard key.
-     * 
+     *
      * @return this
      */
     default Session sendKeyCode(int keyCode) {
-        if ( ! Constant.SPECIAL_KEYS.contains(keyCode) ) {
+        if (!Constant.SPECIAL_KEYS.contains(keyCode)) {
             getThis().logEntry("sendKeyCode", valueOf(keyCode));
         }
         Input input = getThis().getCommand().getInput();
         input.dispatchKeyEvent(KeyDown, null, null, null,
-                                null, null, null, null,
-                                keyCode, keyCode, null, null, null, null);
+                null, null, null, null,
+                keyCode, keyCode, null, null, null, null);
         input.dispatchKeyEvent(KeyUp, null, null, null,
-                                null, null, null, null,
-                                keyCode, keyCode, null, null, null, null);
+                null, null, null, null,
+                keyCode, keyCode, null, null, null, null);
         return getThis();
     }
 

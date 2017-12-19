@@ -21,40 +21,30 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-class WebSocketInputStream extends BufferedInputStream
-{
-    public WebSocketInputStream(InputStream in)
-    {
+class WebSocketInputStream extends BufferedInputStream {
+    public WebSocketInputStream(InputStream in) {
         super(in);
     }
 
 
-    public String readLine() throws IOException
-    {
+    public String readLine() throws IOException {
         return Misc.readLine(this, "UTF-8");
     }
 
 
-    public WebSocketFrame readFrame() throws IOException, WebSocketException
-    {
+    public WebSocketFrame readFrame() throws IOException, WebSocketException {
         // Buffer.
         byte[] buffer = new byte[8];
 
-        try
-        {
+        try {
             // Read the first two bytes.
             readBytes(buffer, 2);
-        }
-        catch (InsufficientDataException e)
-        {
-            if (e.getReadByteCount() == 0)
-            {
+        } catch (InsufficientDataException e) {
+            if (e.getReadByteCount() == 0) {
                 // The connection has been closed without receiving a close frame.
                 // Strictly speaking, this is a violation against RFC 6455.
                 throw new NoMoreFrameException();
-            }
-            else
-            {
+            } else {
                 // Re-throw the exception.
                 throw e;
             }
@@ -81,18 +71,15 @@ class WebSocketInputStream extends BufferedInputStream
         // The payload length. It is expressed in 7 bits.
         long payloadLength = buffer[1] & 0x7F;
 
-        if (payloadLength == 126)
-        {
+        if (payloadLength == 126) {
             // Read the extended payload length.
             // It is expressed in 2 bytes in network byte order.
             readBytes(buffer, 2);
 
             // Interpret the bytes as a number.
             payloadLength = (((buffer[0] & 0xFF) << 8) |
-                             ((buffer[1] & 0xFF)     ));
-        }
-        else if (payloadLength == 127)
-        {
+                    ((buffer[1] & 0xFF)));
+        } else if (payloadLength == 127) {
             // Read the extended payload length.
             // It is expressed in 8 bytes in network byte order.
             readBytes(buffer, 8);
@@ -101,43 +88,40 @@ class WebSocketInputStream extends BufferedInputStream
             //
             //   the most significant bit MUST be 0
             //
-            if ((buffer[0] & 0x80) != 0)
-            {
+            if ((buffer[0] & 0x80) != 0) {
                 // The payload length in a frame is invalid.
                 throw new WebSocketException(
-                    WebSocketError.INVALID_PAYLOAD_LENGTH,
-                    "The payload length of a frame is invalid.");
+                        WebSocketError.INVALID_PAYLOAD_LENGTH,
+                        "The payload length of a frame is invalid.");
             }
 
             // Interpret the bytes as a number.
             payloadLength = (((buffer[0] & 0xFF) << 56) |
-                             ((buffer[1] & 0xFF) << 48) |
-                             ((buffer[2] & 0xFF) << 40) |
-                             ((buffer[3] & 0xFF) << 32) |
-                             ((buffer[4] & 0xFF) << 24) |
-                             ((buffer[5] & 0xFF) << 16) |
-                             ((buffer[6] & 0xFF) <<  8) |
-                             ((buffer[7] & 0xFF)      ));
+                    ((buffer[1] & 0xFF) << 48) |
+                    ((buffer[2] & 0xFF) << 40) |
+                    ((buffer[3] & 0xFF) << 32) |
+                    ((buffer[4] & 0xFF) << 24) |
+                    ((buffer[5] & 0xFF) << 16) |
+                    ((buffer[6] & 0xFF) << 8) |
+                    ((buffer[7] & 0xFF)));
         }
 
         // Masking key
         byte[] maskingKey = null;
 
-        if (mask)
-        {
+        if (mask) {
             // Read the masking key. (This should never happen.)
             maskingKey = new byte[4];
             readBytes(maskingKey, 4);
         }
 
-        if (Integer.MAX_VALUE < payloadLength)
-        {
+        if (Integer.MAX_VALUE < payloadLength) {
             // In Java, the maximum array size is Integer.MAX_VALUE.
             // Skip the payload and raise an exception.
             skipQuietly(payloadLength);
             throw new WebSocketException(
-                WebSocketError.TOO_LONG_PAYLOAD,
-                "The payload length of a frame exceeds the maximum array size in Java.");
+                    WebSocketError.TOO_LONG_PAYLOAD,
+                    "The payload length of a frame exceeds the maximum array size in Java.");
         }
 
         // Read the payload if the payload length is not 0.
@@ -145,27 +129,24 @@ class WebSocketInputStream extends BufferedInputStream
 
         // Create a WebSocketFrame instance that represents a frame.
         return new WebSocketFrame()
-            .setFin(fin)
-            .setRsv1(rsv1)
-            .setRsv2(rsv2)
-            .setRsv3(rsv3)
-            .setOpcode(opcode)
-            .setMask(mask)
-            .setPayload(payload);
+                .setFin(fin)
+                .setRsv1(rsv1)
+                .setRsv2(rsv2)
+                .setRsv3(rsv3)
+                .setOpcode(opcode)
+                .setMask(mask)
+                .setPayload(payload);
     }
 
 
-    void readBytes(byte[] buffer, int length) throws IOException, WebSocketException
-    {
+    void readBytes(byte[] buffer, int length) throws IOException, WebSocketException {
         // Read
         int total = 0;
 
-        while (total < length)
-        {
+        while (total < length) {
             int count = read(buffer, total, length - total);
 
-            if (count <= 0)
-            {
+            if (count <= 0) {
                 // The end of the stream has been reached unexpectedly.
                 throw new InsufficientDataException(length, total);
             }
@@ -175,48 +156,38 @@ class WebSocketInputStream extends BufferedInputStream
     }
 
 
-    private void skipQuietly(long length)
-    {
-        try
-        {
+    private void skipQuietly(long length) {
+        try {
             skip(length);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
         }
     }
 
 
-    private byte[] readPayload(long payloadLength, boolean mask, byte[] maskingKey) throws IOException, WebSocketException
-    {
-        if (payloadLength == 0)
-        {
+    private byte[] readPayload(long payloadLength, boolean mask, byte[] maskingKey) throws IOException, WebSocketException {
+        if (payloadLength == 0) {
             return null;
         }
 
         byte[] payload;
 
-        try
-        {
+        try {
             // Allocate a memory area to hold the content of the payload.
-            payload = new byte[(int)payloadLength];
-        }
-        catch (OutOfMemoryError e)
-        {
+            payload = new byte[(int) payloadLength];
+        } catch (OutOfMemoryError e) {
             // OutOfMemoryError occurred during a trial to allocate a memory area
             // for a frame's payload. Skip the payload and raise an exception.
             skipQuietly(payloadLength);
             throw new WebSocketException(
-                WebSocketError.INSUFFICIENT_MEMORY_FOR_PAYLOAD,
-                "OutOfMemoryError occurred during a trial to allocate a memory area for a frame's payload: " + e.getMessage(), e);
+                    WebSocketError.INSUFFICIENT_MEMORY_FOR_PAYLOAD,
+                    "OutOfMemoryError occurred during a trial to allocate a memory area for a frame's payload: " + e.getMessage(), e);
         }
 
         // Read the payload.
         readBytes(payload, payload.length);
 
         // If masked.
-        if (mask)
-        {
+        if (mask) {
             // Unmasked the payload.
             WebSocketFrame.mask(maskingKey, payload);
         }

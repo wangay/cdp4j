@@ -1,17 +1,17 @@
 /**
  * cdp4j - Chrome DevTools Protocol for Java
  * Copyright © 2017 WebFolder OÜ (support@webfolder.io)
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -69,8 +69,8 @@ class WSAdapter extends WebSocketAdapter {
                 session.close();
                 session.terminate(
                         object.get("params")
-                        .getAsJsonObject()
-                        .get("reason").getAsString());
+                                .getAsJsonObject()
+                                .get("reason").getAsString());
             }
         }
     }
@@ -81,11 +81,11 @@ class WSAdapter extends WebSocketAdapter {
             final List<EventListener<?>> eventListeners,
             final Executor executor,
             final CdpLogger log) {
-        this.gson           = gson;
-        this.contextList    = contextList;
+        this.gson = gson;
+        this.contextList = contextList;
         this.eventListeners = eventListeners;
-        this.executor       = executor;
-        this.log            = log; 
+        this.executor = executor;
+        this.log = log;
     }
 
     protected Map<String, Events> listEvents() {
@@ -97,13 +97,13 @@ class WSAdapter extends WebSocketAdapter {
     }
 
     @Override
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public void onTextMessage(
-                            final WebSocket websocket,
-                            final String data) throws Exception {
+            final WebSocket websocket,
+            final String data) throws Exception {
         executor.execute(() -> {
             log.debug(data);
-            JsonElement  json = gson.fromJson(data, JsonElement.class);
+            JsonElement json = gson.fromJson(data, JsonElement.class);
             JsonObject object = json.getAsJsonObject();
             JsonElement idElement = object.get("id");
             if (idElement != null) {
@@ -118,8 +118,8 @@ class WSAdapter extends WebSocketAdapter {
                             String message = error.getAsJsonPrimitive("message").getAsString();
                             JsonElement messageData = error.get("data");
                             context.setError(new CommandException(code, message +
-                                                        (messageData != null && messageData.isJsonPrimitive() ? ". " +
-                                                        messageData.getAsString() : "")));
+                                    (messageData != null && messageData.isJsonPrimitive() ? ". " +
+                                            messageData.getAsString() : "")));
                         } else {
                             context.setData(json);
                         }

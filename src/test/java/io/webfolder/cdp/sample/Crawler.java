@@ -1,17 +1,17 @@
 /**
  * cdp4j - Chrome DevTools Protocol for Java
  * Copyright © 2017 WebFolder OÜ (support@webfolder.io)
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -58,7 +58,7 @@ public class Crawler {
             for (int i = 0; i < nodes.getLength(); i++) {
                 Node node = nodes.item(i);
                 String tc = node.getTextContent();
-                if ( tc != null ) {
+                if (tc != null) {
                     urls.add(tc);
                 }
             }
@@ -160,8 +160,8 @@ public class Crawler {
                 if (NetworkResponseReceived.equals(e)) {
                     ResponseReceived rr = (ResponseReceived) d;
 
-                    if ( ! rr.getResponse().getUrl().startsWith("https://") &&
-                            ! rr.getResponse().getUrl().startsWith("http://") ) {
+                    if (!rr.getResponse().getUrl().startsWith("https://") &&
+                            !rr.getResponse().getUrl().startsWith("http://")) {
                         return;
                     }
 
@@ -181,7 +181,7 @@ public class Crawler {
 
             for (String requestId : finishedResources) {
                 GetResponseBodyResult rb = session.getCommand().getNetwork().getResponseBody(requestId);
-                if ( rb.getBase64Encoded() ) {
+                if (rb.getBase64Encoded()) {
                     webResource.setContent(getDecoder().decode(rb.getBody()));
                 } else {
                     webResource.setDocument(rb.getBody());
@@ -189,7 +189,7 @@ public class Crawler {
             }
 
             String ct = (String) webResource.getResponseHeaders().get("content-type");
-            if ( ct != null && "text/html".equals(ct) ) {
+            if (ct != null && "text/html".equals(ct)) {
                 webResource.setDocument(session.getContent());
             }
 
@@ -198,7 +198,7 @@ public class Crawler {
 
         @Override
         public void close() {
-            if ( session != null ) {
+            if (session != null) {
                 session.close();
             }
         }
@@ -231,8 +231,8 @@ public class Crawler {
 
         for (Resource resource : resources) {
             System.out.println("URL: " + resource.getUrl() +
-                               ", Status Code: " + resource.getStatus() +
-                               ", Content Length: " + resource.getDocument().length());
+                    ", Status Code: " + resource.getStatus() +
+                    ", Content Length: " + resource.getDocument().length());
         }
 
         dummySession.close();

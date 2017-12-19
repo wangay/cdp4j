@@ -1,17 +1,17 @@
 /**
  * cdp4j - Chrome DevTools Protocol for Java
  * Copyright © 2017 WebFolder OÜ (support@webfolder.io)
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -45,11 +45,11 @@ public class Launcher {
 
     private final SessionFactory factory;
 
-    private static final String  OS       = getProperty("os.name").toLowerCase(ENGLISH);
+    private static final String OS = getProperty("os.name").toLowerCase(ENGLISH);
 
-    private static final boolean WINDOWS  = OS.startsWith("windows");
+    private static final boolean WINDOWS = OS.startsWith("windows");
 
-    private static final boolean OSX      = OS.startsWith("mac");
+    private static final boolean OSX = OS.startsWith("mac");
 
     private ProcessManager processManager = new NullProcessManager();
 
@@ -70,7 +70,7 @@ public class Launcher {
     }
 
     public Launcher(int port) {
-      this(new SessionFactory(port));
+        this(new SessionFactory(port));
     }
 
     public Launcher(final SessionFactory factory) {
@@ -92,37 +92,37 @@ public class Launcher {
         String chromeExecutablePath = null;
         chromeExecutablePath = getCustomChromeBinary();
         if (chromeExecutablePath == null && WINDOWS) {
-          chromeExecutablePath = findChromeWinPath();
+            chromeExecutablePath = findChromeWinPath();
         }
         if (chromeExecutablePath == null && OSX) {
-          chromeExecutablePath = findChromeOsxPath();
+            chromeExecutablePath = findChromeOsxPath();
         }
-        if ( chromeExecutablePath == null && ! WINDOWS ) {
-          chromeExecutablePath = "google-chrome";
+        if (chromeExecutablePath == null && !WINDOWS) {
+            chromeExecutablePath = "google-chrome";
         }
         return chromeExecutablePath;
-      }
+    }
 
     public String findChromeWinPath() {
-      try {
-          for (String path : getChromeWinPaths()) {
-              final Process process = getRuntime().exec(new String[] {
-                      "cmd", "/c", "echo", path
-              });
-              final int exitCode = process.waitFor();
-              if (exitCode == 0) {
-                  final String location = toString(process.getInputStream()).trim().replace("\"", "");
-                  final File chrome = new File(location);
-                  if (chrome.exists() && chrome.canExecute()) {
-                      return chrome.toString();
-                  }
-              }
-          }
-          throw new CdpException("Unable to find chrome.exe");
-      } catch (Throwable e) {
-          // ignore
-      }
-      return null;
+        try {
+            for (String path : getChromeWinPaths()) {
+                final Process process = getRuntime().exec(new String[]{
+                        "cmd", "/c", "echo", path
+                });
+                final int exitCode = process.waitFor();
+                if (exitCode == 0) {
+                    final String location = toString(process.getInputStream()).trim().replace("\"", "");
+                    final File chrome = new File(location);
+                    if (chrome.exists() && chrome.canExecute()) {
+                        return chrome.toString();
+                    }
+                }
+            }
+            throw new CdpException("Unable to find chrome.exe");
+        } catch (Throwable e) {
+            // ignore
+        }
+        return null;
     }
 
     protected List<String> getChromeWinPaths() {
@@ -189,12 +189,12 @@ public class Launcher {
             }
         }
 
-        if ( ! foundUserDataDir ) {
+        if (!foundUserDataDir) {
             Path remoteProfileData = get(getProperty("java.io.tmpdir")).resolve("remote-profile");
             list.add(format("--user-data-dir=%s", remoteProfileData.toString()));
         }
 
-        if ( ! DEFAULT_HOST.equals(factory.getHost()) ) {
+        if (!DEFAULT_HOST.equals(factory.getHost())) {
             list.add(format("--remote-debugging-address=%s", factory.getHost()));
         }
 
@@ -221,7 +221,7 @@ public class Launcher {
         list.add("--disable-plugin-power-saver");
         list.add("--disable-popup-blocking");
 
-        if ( ! arguments.isEmpty() ) {
+        if (!arguments.isEmpty()) {
             list.addAll(arguments);
         }
 
@@ -235,7 +235,7 @@ public class Launcher {
             process.getOutputStream().close();
             process.getInputStream().close();
 
-            if ( ! process.isAlive() ) {
+            if (!process.isAlive()) {
                 throw new CdpException("No process: the chrome process is not alive.");
             }
 
@@ -244,10 +244,10 @@ public class Launcher {
             throw new CdpException(e);
         }
 
-        if ( ! launched() ) {
-                  int counter  =  0;
+        if (!launched()) {
+            int counter = 0;
             final int maxCount = 20;
-            while ( ! launched() && counter < maxCount ) {
+            while (!launched() && counter < maxCount) {
                 try {
                     sleep(500);
                     counter += 1;
@@ -257,9 +257,9 @@ public class Launcher {
             }
         }
 
-        if ( ! launched() ) {
+        if (!launched()) {
             throw new CdpException("Unable to connect to the chrome remote debugging server [" +
-                            factory.getHost() + ":" + factory.getPort() + "]");
+                    factory.getHost() + ":" + factory.getPort() + "]");
         }
 
         return factory;
@@ -280,7 +280,7 @@ public class Launcher {
         } catch (Throwable t) {
             // ignore
         }
-        return ! list.isEmpty() ? true : false;
+        return !list.isEmpty() ? true : false;
     }
 
     public void setProcessManager(ProcessManager processManager) {

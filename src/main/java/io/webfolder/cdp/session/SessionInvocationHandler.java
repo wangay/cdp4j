@@ -1,17 +1,17 @@
 /**
  * cdp4j - Chrome DevTools Protocol for Java
  * Copyright © 2017 WebFolder OÜ (support@webfolder.io)
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -56,33 +56,33 @@ class SessionInvocationHandler implements InvocationHandler {
     private final Session session;
 
     public SessionInvocationHandler(
-                    final Gson gson,
-                    final WebSocket webSocket,
-                    final Map<Integer, WSContext> contextList,
-                    final Session session,
-                    final CdpLogger log) {
-        this.gson        = gson;
-        this.webSocket   = webSocket;
+            final Gson gson,
+            final WebSocket webSocket,
+            final Map<Integer, WSContext> contextList,
+            final Session session,
+            final CdpLogger log) {
+        this.gson = gson;
+        this.webSocket = webSocket;
         this.contextList = contextList;
-        this.session     = session;
-        this.log         = log;
+        this.session = session;
+        this.log = log;
     }
 
     @Override
     public Object invoke(
-                final Object proxy,
-                final Method method,
-                final Object[] args) throws Throwable {
+            final Object proxy,
+            final Method method,
+            final Object[] args) throws Throwable {
 
         final Class<?> klass = method.getDeclaringClass();
-        final String  domain = klass.getAnnotation(Domain.class).value();
+        final String domain = klass.getAnnotation(Domain.class).value();
         final String command = method.getName();
 
         boolean hasArgs = args != null && args.length > 0;
 
         Map<String, Object> params = hasArgs ?
-                                        new HashMap<>(args.length) :
-                                        emptyMap();
+                new HashMap<>(args.length) :
+                emptyMap();
 
         if (hasArgs) {
             int argIndex = 0;
@@ -95,7 +95,7 @@ class SessionInvocationHandler implements InvocationHandler {
 
         int id = counter.incrementAndGet();
         Map<String, Object> map = new HashMap<>(3);
-        map.put("id"    , id);
+        map.put("id", id);
         map.put("method", format("%s.%s", domain, command));
         map.put("params", params);
 
@@ -114,7 +114,7 @@ class SessionInvocationHandler implements InvocationHandler {
             throw new CdpException("WebSocket connection is not alive");
         }
 
-        if ( context.getError() != null ) {
+        if (context.getError() != null) {
             throw context.getError();
         }
 
@@ -127,33 +127,33 @@ class SessionInvocationHandler implements InvocationHandler {
         JsonElement data = context.getData();
 
         String returns = method.isAnnotationPresent(Returns.class) ?
-                    method.getAnnotation(Returns.class).value() : null;
+                method.getAnnotation(Returns.class).value() : null;
 
         if (data == null) {
             return null;
         }
 
-        if ( ! data.isJsonObject() ) {
+        if (!data.isJsonObject()) {
             throw new CdpException("invalid response");
         }
 
         JsonObject object = data.getAsJsonObject();
         JsonElement result = object.get("result");
 
-        if ( result == null || ! result.isJsonObject() ) {
-            throw new CdpException("invalid result");   
+        if (result == null || !result.isJsonObject()) {
+            throw new CdpException("invalid result");
         }
 
         JsonObject resultObject = result.getAsJsonObject();
 
         Object ret = null;
         Type genericReturnType = method.getGenericReturnType();
-        
+
         if (returns != null) {
 
             JsonElement jsonElement = resultObject.get(returns);
 
-            if ( jsonElement != null && jsonElement.isJsonPrimitive() ) {
+            if (jsonElement != null && jsonElement.isJsonPrimitive()) {
                 if (String.class.equals(retType)) {
                     return resultObject.get(returns).getAsString();
                 } else if (Boolean.class.equals(retType)) {

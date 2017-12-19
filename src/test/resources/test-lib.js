@@ -1,4 +1,4 @@
-var fibonacci = function(num) {
+var fibonacci = function (num) {
     var a = 1;
     var b = 0;
     var temp;

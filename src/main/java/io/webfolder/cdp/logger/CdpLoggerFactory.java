@@ -1,17 +1,17 @@
 /**
  * cdp4j - Chrome DevTools Protocol for Java
  * Copyright © 2017 WebFolder OÜ (support@webfolder.io)
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,19 +31,24 @@ public class CdpLoggerFactory {
     private static CdpLogger NULL_LOGGER = new CdpLogger() {
 
         @Override
-        public void info(String message, Object ...args) { }
+        public void info(String message, Object... args) {
+        }
 
         @Override
-        public void debug(String message, Object ...args) { }
+        public void debug(String message, Object... args) {
+        }
 
         @Override
-        public void error(String message, Object ...args) { }
+        public void error(String message, Object... args) {
+        }
 
         @Override
-        public void warning(String message, Object ...args) { }
+        public void warning(String message, Object... args) {
+        }
 
         @Override
-        public void error(String message, Throwable t) { }
+        public void error(String message, Throwable t) {
+        }
     };
 
     public CdpLoggerFactory() {
@@ -57,9 +62,12 @@ public class CdpLoggerFactory {
     public CdpLogger getLogger(String name) {
         try {
             switch (loggerType) {
-                case Slf4j  : return new CdpSlf4jLogger(name);
-                case Console: return new CdpConsoleLogger();
-                default     : return NULL_LOGGER;
+                case Slf4j:
+                    return new CdpSlf4jLogger(name);
+                case Console:
+                    return new CdpConsoleLogger();
+                default:
+                    return NULL_LOGGER;
             }
         } catch (Throwable e) {
             log.warning(e.getMessage());

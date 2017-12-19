@@ -1,17 +1,17 @@
 /**
  * cdp4j - Chrome DevTools Protocol for Java
  * Copyright © 2017 WebFolder OÜ (support@webfolder.io)
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -37,12 +37,11 @@ public interface Mouse {
 
     /**
      * Click on the specified element.
-     * 
+     * <p>
      * There are some preconditions for an element to be clicked.
      * The element must be visible and it must have a height and width greater then 0.
-     * 
+     *
      * @param selector css or xpath selector
-     * 
      * @return this
      */
     default Session click(final String selector) {
@@ -52,15 +51,12 @@ public interface Mouse {
 
     /**
      * Click on the specified element.
-     * 
+     * <p>
      * There are some preconditions for an element to be clicked. The element
      * must be visible and it must have a height and width greater then 0.
      *
-     * @param selector
-     *            css or xpath selector
-     * @param args
-     *            format string
-     * 
+     * @param selector css or xpath selector
+     * @param args     format string
      * @return this
      */
     default Session click(final String selector, final Object... args) {
@@ -75,13 +71,13 @@ public interface Mouse {
             return getThis();
         }
         List<Double> content = boxModel.getContent();
-        if (content == null           ||
-                    content.isEmpty() ||
-                    content.size() < 2) {
+        if (content == null ||
+                content.isEmpty() ||
+                content.size() < 2) {
             return getThis();
         }
         double left = floor(content.get(0));
-        double top  = floor(content.get(1));
+        double top = floor(content.get(1));
         int clickCount = 1;
         Input input = getThis().getCommand().getInput();
         input.dispatchMouseEvent(MousePressed, left, top, null, null, Left, clickCount, null, null);

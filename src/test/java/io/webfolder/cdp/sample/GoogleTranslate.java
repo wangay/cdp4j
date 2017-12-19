@@ -1,17 +1,17 @@
 /**
  * cdp4j - Chrome DevTools Protocol for Java
  * Copyright © 2017 WebFolder OÜ (support@webfolder.io)
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -33,7 +33,7 @@ public class GoogleTranslate {
         Launcher launcher = new Launcher();
 
         try (SessionFactory factory = launcher.launch();
-                                Session session = factory.create()) {
+             Session session = factory.create()) {
             session.installSizzle();
 
             Network network = session.getCommand().getNetwork();
@@ -44,18 +44,18 @@ public class GoogleTranslate {
             headers.put("Accept-Language", "en-US,en;q=1");
             headers.put("Cookie", "");
             network.setExtraHTTPHeaders(headers);
-            
+
             session.navigate("https://translate.google.co.uk");
             session.waitDocumentReady();
 
             String appName = session.getText("#gt-appname");
-            if ( ! appName.equals("Translate") ) {
+            if (!appName.equals("Translate")) {
                 session.clearCookies();
                 session.wait(1000);
                 network.setExtraHTTPHeaders(headers);
                 session.reload();
             }
-            
+
             session.click("#gt-sl-gms")
                     .wait(500)
                     .click("div:contains('English'):last")

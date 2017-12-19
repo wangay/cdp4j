@@ -1,17 +1,17 @@
 /**
  * cdp4j - Chrome DevTools Protocol for Java
  * Copyright © 2017 WebFolder OÜ (support@webfolder.io)
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,7 +26,6 @@ import io.webfolder.cdp.type.memory.PressureLevel;
 @Domain("Memory")
 public interface Memory {
     /**
-     * 
      * @return GetDOMCountersResult
      */
     GetDOMCountersResult getDOMCounters();
@@ -35,14 +34,14 @@ public interface Memory {
 
     /**
      * Enable/disable suppressing memory pressure notifications in all processes.
-     * 
+     *
      * @param suppressed If true, memory pressure notifications will be suppressed.
      */
     void setPressureNotificationsSuppressed(Boolean suppressed);
 
     /**
      * Simulate a memory pressure notification in all processes.
-     * 
+     *
      * @param level Memory pressure level of the notification.
      */
     void simulatePressureNotification(PressureLevel level);

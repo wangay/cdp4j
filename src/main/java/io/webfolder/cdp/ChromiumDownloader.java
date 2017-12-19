@@ -1,17 +1,17 @@
 /**
  * cdp4j - Chrome DevTools Protocol for Java
  * Copyright © 2017 WebFolder OÜ (support@webfolder.io)
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -60,13 +60,13 @@ public class ChromiumDownloader implements Downloader {
 
     public static final ChromiumVersion LATEST_VERSION = getLatestVersion();
 
-    private static final boolean        WINDOWS        = ";".equals(pathSeparator);
+    private static final boolean WINDOWS = ";".equals(pathSeparator);
 
-    private static final String         OS             = getProperty("os.name").toLowerCase(ENGLISH);
+    private static final String OS = getProperty("os.name").toLowerCase(ENGLISH);
 
-    private static final String         DOWNLOAD_HOST  = "https://storage.googleapis.com/chromium-browser-snapshots";
+    private static final String DOWNLOAD_HOST = "https://storage.googleapis.com/chromium-browser-snapshots";
 
-    private static final int            TIMEOUT        = 10 * 1000; // 10 seconds
+    private static final int TIMEOUT = 10 * 1000; // 10 seconds
 
     private final CdpLogger logger;
 
@@ -124,11 +124,11 @@ public class ChromiumDownloader implements Downloader {
 
     public Path download(ChromiumVersion version) {
         Path destinationRoot = get(getProperty("user.home"))
-                                .resolve(".cdp4j")
-                                .resolve("chromium-" + valueOf(version.toString().replace('_', '.')));
+                .resolve(".cdp4j")
+                .resolve("chromium-" + valueOf(version.toString().replace('_', '.')));
 
         Path executable = destinationRoot.resolve("chrome.exe");
-        if ( ! WINDOWS ) {
+        if (!WINDOWS) {
             executable = destinationRoot.resolve("chrome");
         }
 
@@ -153,19 +153,19 @@ public class ChromiumDownloader implements Downloader {
             conn.setRequestMethod("HEAD");
             conn.setConnectTimeout(TIMEOUT);
             conn.setReadTimeout(TIMEOUT);
-            if ( conn.getResponseCode() != 200 ) {
+            if (conn.getResponseCode() != 200) {
                 throw new CdpException(conn.getResponseCode() + " - " + conn.getResponseMessage());
             }
             String contentLength = conn.getHeaderField("x-goog-stored-content-length");
             String fileName = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf(".")) + "-r" + version.revision + ".zip";
             Path archive = get(getProperty("java.io.tmpdir")).resolve(fileName);
-            if ( exists(archive) && ! contentLength.equals(valueOf(size(archive))) ) {
+            if (exists(archive) && !contentLength.equals(valueOf(size(archive)))) {
                 delete(archive);
             }
-            if ( ! exists(archive) ) {
+            if (!exists(archive)) {
                 logger.info("Downloading Chromium " + version.toString().replace('_', '.') + ": " + u.toString());
                 u = new URL(url);
-                if ( conn.getResponseCode() != 200 ) {
+                if (conn.getResponseCode() != 200) {
                     throw new CdpException(conn.getResponseCode() + " - " + conn.getResponseMessage());
                 }
                 conn = (HttpURLConnection) u.openConnection();
@@ -187,13 +187,13 @@ public class ChromiumDownloader implements Downloader {
                     }
                 }
             }
-            if ( ! WINDOWS ) {
+            if (!WINDOWS) {
                 Set<PosixFilePermission> permissions = getPosixFilePermissions(executable);
-                if ( ! permissions.contains(OWNER_EXECUTE)) {
+                if (!permissions.contains(OWNER_EXECUTE)) {
                     permissions.add(OWNER_EXECUTE);
                     setPosixFilePermissions(destinationRoot.resolve("chrome"), permissions);
                 }
-                if ( ! permissions.contains(GROUP_EXECUTE) ) {
+                if (!permissions.contains(GROUP_EXECUTE)) {
                     permissions.add(GROUP_EXECUTE);
                     setPosixFilePermissions(destinationRoot.resolve("chrome"), permissions);
                 }

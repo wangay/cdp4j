@@ -10,6 +10,7 @@ import java.util.Random;
 import static java.lang.System.getProperty;
 import static java.nio.file.Paths.get;
 import static java.util.Arrays.asList;
+
 import io.webfolder.cdp.Launcher;
 import io.webfolder.cdp.session.Session;
 import io.webfolder.cdp.session.SessionFactory;
