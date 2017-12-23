@@ -25,10 +25,30 @@ public class HelloWorld {
 
     public static void main(String[] args) {
         Launcher launcher = new Launcher();
-
+//        SessionFactory factory = launcher.launch();
+//        Session session = factory.create();
+////        session.navigate("https://webfolder.io?cdp4j");
+////        session.navigate("https://baidu.com");
+////        session.navigate("http://jandan.net/ooxx/page-393#comments");
+//        session.navigate("http://jandan.net/ooxx/page-393");
+//
+//        session.waitDocumentReady();
+//        String content = session.getContent();
+//        System.out.println(content);
+//        session.close();
+//        factory.close();
+//        try (SessionFactory factory = launcher.launch();
+//              Session session = factory.create()) {
+////            session.navigate("http://jandan.net/ooxx/page-393");
+//            session.navigate("https://baidu.com");
+//            session.waitDocumentReady();
+//            String content = session.getContent();
+//            System.out.println(content);
+//        }
         try (SessionFactory factory = launcher.launch();
              Session session = factory.create()) {
-            session.navigate("https://webfolder.io?cdp4j");
+            session.navigate("http://jandan.net/ooxx/page-393");
+//            session.navigate("https://baidu.com");
             session.waitDocumentReady();
             String content = session.getContent();
             System.out.println(content);

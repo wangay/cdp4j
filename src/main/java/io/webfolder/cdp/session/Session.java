@@ -213,6 +213,7 @@ public class Session implements AutoCloseable,
         AtomicBoolean ready = new AtomicBoolean(false);
         if (isConnected()) {
             command.getPage().enable();
+            //只是定义.不会马上执行.addEventListener时导致了"执行0"
             EventListener<?> loadListener = (e, d) -> {
                 if (PageLifecycleEvent.equals(e) &&
                         "load".equalsIgnoreCase(((LifecycleEvent) d).getName())) {
@@ -224,6 +225,9 @@ public class Session implements AutoCloseable,
                 }
             };
             addEventListener(loadListener);
+            /***
+             * //如果多个session,这里会报错
+             */
             sesessionFactory.getThreadPool().execute(() -> {
                 try {
                     waitUntil(s -> !isConnected() || s.isDomReady() || ready.get(), timeout, false);
@@ -238,8 +242,10 @@ public class Session implements AutoCloseable,
                 }
             });
             try {
+                //等待上面两个线程任务执行完毕后,才会从这里继续执行
                 latch.await(timeout, MILLISECONDS);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 throw new LoadTimeoutException(e);
             } finally {
                 removeEventEventListener(loadListener);
@@ -445,8 +451,10 @@ public class Session implements AutoCloseable,
                 if (log) {
                     logEntry("wait", timeout + "ms");
                 }
+                //alexTODO 这里会报错
                 condition.await(timeout, MILLISECONDS);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 throw new CdpException(e);
             } finally {
                 if (lock.isLocked()) {

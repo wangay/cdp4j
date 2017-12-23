@@ -177,6 +177,7 @@ public class Launcher {
 
         List<String> list = new ArrayList<>();
         list.add(chromeExecutablePath);
+        //list.add("--headless");//alexTODO 为什么之前没加无头参数?
 
         list.add(format("--remote-debugging-port=%d", factory.getPort()));
 
@@ -252,6 +253,7 @@ public class Launcher {
                     sleep(500);
                     counter += 1;
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     break;
                 }
             }

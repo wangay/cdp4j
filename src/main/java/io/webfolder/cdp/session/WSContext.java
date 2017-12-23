@@ -40,6 +40,7 @@ class WSContext {
         try {
             latch.await(WS_TIMEOUT, SECONDS);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             throw new CdpException(e);
         }
     }

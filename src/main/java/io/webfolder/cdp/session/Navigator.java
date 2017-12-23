@@ -159,10 +159,21 @@ public interface Navigator {
         getThis().disableFlowLog();
         DOM dom = getThis().getCommand().getDOM();
         Integer nodeId = dom.getDocument().getNodeId();
-        RemoteObject remoteObject = dom.resolveNode(nodeId, null, null);
-        String title = (String) getThis().getPropertyByObjectId(remoteObject.getObjectId(), "documentElement.outerHTML");
-        getThis().logExit("getContent", title);
-        getThis().releaseObject(remoteObject.getObjectId());
+        String title = "";
+        RemoteObject remoteObject=null;
+        try {
+            remoteObject = dom.resolveNode(nodeId, null, null);
+            if(remoteObject==null){
+                return title;
+            }
+            title = (String) getThis().getPropertyByObjectId(remoteObject.getObjectId(), "documentElement.outerHTML");
+            getThis().logExit("getContent", title);
+            //alexTODO  释放对象相关
+           // getThis().releaseObject(remoteObject.getObjectId());
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.out.println("报错了");
+        }
         return title;
     }
 

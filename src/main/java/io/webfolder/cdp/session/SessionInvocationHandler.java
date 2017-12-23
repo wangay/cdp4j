@@ -93,7 +93,13 @@ class SessionInvocationHandler implements InvocationHandler {
             }
         }
 
-        int id = counter.incrementAndGet();
+        //alexTODO 如果id找不到了,下面这一个就会报错.
+        int id = 0;
+        try {
+            id = counter.incrementAndGet();
+        } catch (Exception e) {
+            System.out.println("这里报错了");
+        }
         Map<String, Object> map = new HashMap<>(3);
         map.put("id", id);
         map.put("method", format("%s.%s", domain, command));
@@ -101,13 +107,19 @@ class SessionInvocationHandler implements InvocationHandler {
 
         String json = gson.toJson(map);
 
-        log.debug(json);
+        log.debug("发送的json是:"+json);
 
         WSContext context = null;
 
         if (session.isConnected()) {
             context = new WSContext();
             contextList.put(id, context);
+            /***
+             * 会触发WSAdapter.onTextMessage .它是接收到了server的数据.
+             * 里面也会改变CountDownLatch的值,让下面的context.await()等待结束.
+             *
+             * 这个发送是异步的
+             */
             webSocket.sendText(json);
             context.await();
         } else {
@@ -115,7 +127,9 @@ class SessionInvocationHandler implements InvocationHandler {
         }
 
         if (context.getError() != null) {
-            throw context.getError();
+            //alexTODO 报错的时候,先不抛出
+            System.out.println("之前报错的地方:context.getError() != null");
+            //throw context.getError();
         }
 
         Class<?> retType = method.getReturnType();

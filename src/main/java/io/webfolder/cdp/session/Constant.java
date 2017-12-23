@@ -45,7 +45,8 @@ public interface Constant {
 
     Object[] EMPTY_ARGS = new Object[]{};
 
-    int WAIT_TIMEOUT = 10 * 1000; // 10 seconds
+//    int WAIT_TIMEOUT = 15 * 1000; // 10 seconds
+    int WAIT_TIMEOUT = 1000 * 1000; // alexTODO 用上面的 100 seconds
 
     int WAIT_PERIOD = 100; // 0.1 seconds
 }

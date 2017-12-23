@@ -241,6 +241,7 @@ public class SessionFactory implements AutoCloseable {
     }
 
     public Session connect(String sessionId) {
+        //alexTODO sessions数量大于1的时候,会报错
         List<SessionInfo> sessions = list();
         String webSocketDebuggerUrl = null;
         for (SessionInfo session : sessions) {
@@ -257,6 +258,7 @@ public class SessionFactory implements AutoCloseable {
         try {
             Map<Integer, WSContext> contextList = new ConcurrentHashMap<>();
             List<EventListener<?>> eventListeners = new CopyOnWriteArrayList<>();
+            //创建webSocket,server url是webSocketDebuggerUrl
             webSocket = factory.createSocket(webSocketDebuggerUrl);
             WSAdapter adapter = new WSAdapter(gson, contextList, eventListeners,
                     threadPool, loggerFactory.getLogger("cdp4j.ws.response"));
