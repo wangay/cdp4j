@@ -60,7 +60,7 @@ public class CdpPubUtil {
         return result;
     }
 
-    public  void getHtml(String url,int maxTryTimes) {
+    public  String getHtml(String url,int maxTryTimes) {
         while (true){
             boolean result = go(url);
             if(result || tryTimes >=maxTryTimes){
@@ -70,6 +70,7 @@ public class CdpPubUtil {
                 tryTimes++;
             }
         }
+        return this.content;
     }
 
 

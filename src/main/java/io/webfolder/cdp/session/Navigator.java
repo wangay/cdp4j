@@ -172,7 +172,6 @@ public interface Navigator {
            // getThis().releaseObject(remoteObject.getObjectId());
         } catch (Exception e) {
             //e.printStackTrace();
-            System.out.println("报错了");
         }
         return title;
     }

@@ -93,13 +93,7 @@ class SessionInvocationHandler implements InvocationHandler {
             }
         }
 
-        //alexTODO 如果id找不到了,下面这一个就会报错.
-        int id = 0;
-        try {
-            id = counter.incrementAndGet();
-        } catch (Exception e) {
-            System.out.println("这里报错了");
-        }
+        int id = counter.incrementAndGet();
         Map<String, Object> map = new HashMap<>(3);
         map.put("id", id);
         map.put("method", format("%s.%s", domain, command));
@@ -128,7 +122,7 @@ class SessionInvocationHandler implements InvocationHandler {
 
         if (context.getError() != null) {
             //alexTODO 报错的时候,先不抛出
-            System.out.println("之前报错的地方:context.getError() != null");
+            log.error("之前报错的地方:context.getError() != null");
             //throw context.getError();
         }
 

@@ -17,48 +17,16 @@
  */
 package io.webfolder.cdp.sample;
 
+import io.webfolder.cdp.CdpPubUtil;
 import io.webfolder.cdp.Launcher;
 import io.webfolder.cdp.session.Session;
 import io.webfolder.cdp.session.SessionFactory;
 
 public class HelloWorld {
 
-    private  static  int count=0;
-
-
-    public static boolean go() {
-        boolean result = false;
-        try {
-            Launcher launcher = new Launcher();
-            try (SessionFactory factory = launcher.launch();
-                 Session session = factory.create()) {
-                session.navigate("http://jandan.net/ooxx/page-393");
-    //            session.navigate("https://baidu.com");
-                session.waitDocumentReady();
-                String content = session.getContent();
-                if(content!=null && content.indexOf("html")>-1){
-                    System.out.println(content);
-                    return true;//说明返回数据了
-                }else{
-                    System.out.println("1111");
-                }
-            }
-        } catch (Exception e) {
-            //出错了,就返回false
-            result=false;
-        }
-        return result;
-    }
 
     public static void main(String[] args) {
-        while (true){
-            boolean result = go();
-            if(result){
-                break;
-            }else{
-                count++;
-            }
-        }
-        System.out.println(count);
+        String html = CdpPubUtil.getInstance().getHtml("http://jandan.net/ooxx/page-393",10);
+        System.out.println(html);
     }
 }
