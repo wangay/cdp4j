@@ -455,6 +455,7 @@ public class Session implements AutoCloseable,
                 condition.await(timeout, MILLISECONDS);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                //alexTODO  注释掉中断异常时,抛出的运行时异常.
                 throw new CdpException(e);
             } finally {
                 if (lock.isLocked()) {

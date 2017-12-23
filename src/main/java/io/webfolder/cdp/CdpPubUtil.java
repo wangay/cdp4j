@@ -15,32 +15,42 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.webfolder.cdp.sample;
+package io.webfolder.cdp;
 
-import io.webfolder.cdp.Launcher;
 import io.webfolder.cdp.session.Session;
 import io.webfolder.cdp.session.SessionFactory;
 
-public class HelloWorld {
+/***
+ * cdp常用方法:
+ * 使用CdpPubUtil.getInstance().getHtml("http://jandan.net/ooxx/page-393",10)
+ */
+public class CdpPubUtil {
 
-    private  static  int count=0;
+    private static CdpPubUtil ourInstance = new CdpPubUtil();
 
+    public static CdpPubUtil getInstance() {
+        return ourInstance;
+    }
 
-    public static boolean go() {
+    private CdpPubUtil() {
+    }
+
+    //尝试次数
+    private    int tryTimes =0;
+
+    private String content;
+
+    private  boolean go(String url) {
         boolean result = false;
         try {
             Launcher launcher = new Launcher();
             try (SessionFactory factory = launcher.launch();
                  Session session = factory.create()) {
-                session.navigate("http://jandan.net/ooxx/page-393");
-    //            session.navigate("https://baidu.com");
+                session.navigate(url);
                 session.waitDocumentReady();
-                String content = session.getContent();
-                if(content!=null && content.indexOf("html")>-1){
-                    System.out.println(content);
+                content = session.getContent();
+                if(content!=null && (content.indexOf("html")>-1|| content.indexOf("meta")>-1)){
                     return true;//说明返回数据了
-                }else{
-                    System.out.println("1111");
                 }
             }
         } catch (Exception e) {
@@ -50,15 +60,19 @@ public class HelloWorld {
         return result;
     }
 
-    public static void main(String[] args) {
+    public  void getHtml(String url,int maxTryTimes) {
         while (true){
-            boolean result = go();
-            if(result){
+            boolean result = go(url);
+            if(result || tryTimes >=maxTryTimes){
+                //结果正确,或者超过了允许的尝试次数
                 break;
             }else{
-                count++;
+                tryTimes++;
             }
         }
-        System.out.println(count);
     }
+
+
+
+
 }
