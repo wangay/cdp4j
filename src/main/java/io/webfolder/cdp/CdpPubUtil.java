@@ -17,6 +17,7 @@
  */
 package io.webfolder.cdp;
 
+import com.sun.tools.javac.util.StringUtils;
 import io.webfolder.cdp.session.Session;
 import io.webfolder.cdp.session.SessionFactory;
 
@@ -49,7 +50,7 @@ public class CdpPubUtil {
                 session.navigate(url);
                 session.waitDocumentReady();
                 content = session.getContent();
-                if(content!=null && (content.indexOf("html")>-1|| content.indexOf("meta")>-1)){
+                if(content!=null && content.length()>10 && (content.indexOf("html")>-1|| content.indexOf("meta")>-1)){
                     return true;//说明返回数据了
                 }
             }
