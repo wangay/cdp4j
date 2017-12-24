@@ -17,7 +17,6 @@
  */
 package io.webfolder.cdp;
 
-import com.sun.tools.javac.util.StringUtils;
 import io.webfolder.cdp.session.Session;
 import io.webfolder.cdp.session.SessionFactory;
 
