@@ -34,7 +34,7 @@ public class Attributes {
              Session session = factory.create()) {
             session.navigate(url.toString());
             session.waitDocumentReady();
-            String value = session.getAttribute("input", "value");
+            String value = session.getAttribute("#xx", "value");
             System.out.println("Old Value: " + value);
             session.setAttribute("input", "value", "bar");
             value = session.getAttribute("input", "value");

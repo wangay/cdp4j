@@ -122,7 +122,7 @@ class SessionInvocationHandler implements InvocationHandler {
 
         if (context.getError() != null) {
             //alexTODO 报错的时候,先不抛出
-            log.error("之前报错的地方:context.getError() != null");
+//            log.error("之前报错的地方:context.getError() != null");
             //throw context.getError();
         }
 

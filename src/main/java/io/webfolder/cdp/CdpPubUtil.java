@@ -35,9 +35,6 @@ public class CdpPubUtil {
     private CdpPubUtil() {
     }
 
-    //尝试次数
-    private    int tryTimes =0;
-
     private String content;
 
     private  boolean go(String url) {
@@ -49,7 +46,7 @@ public class CdpPubUtil {
                 session.navigate(url);
                 session.waitDocumentReady();
                 content = session.getContent();
-                if(content!=null && content.length()>10 && (content.indexOf("html")>-1|| content.indexOf("meta")>-1)){
+                if(content!=null  && (content.indexOf("html")>-1|| content.indexOf("meta")>-1)){
                     return true;//说明返回数据了
                 }
             }
@@ -60,7 +57,8 @@ public class CdpPubUtil {
         return result;
     }
 
-    public  String getHtml(String url,int maxTryTimes) {
+    public  synchronized String getHtml(String url,int maxTryTimes) {
+        int tryTimes =0;//尝试次数
         while (true){
             boolean result = go(url);
             if(result || tryTimes >=maxTryTimes){
@@ -74,6 +72,16 @@ public class CdpPubUtil {
     }
 
 
+    public static void main(String[] args) {
+        Launcher launcher = new Launcher();
+        try (SessionFactory factory = launcher.launch();
+             Session session = factory.create()) {
+            session.navigate("https://www.instagram.com/p/BbrY5Dml_Jh/?taken-by=kanamizu_yu");
+            session.waitDocumentReady();
+            String content = session.getContent();
+            System.out.println(content);
+        }
+    }
 
 
 }

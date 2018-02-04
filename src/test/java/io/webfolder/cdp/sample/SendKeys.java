@@ -34,6 +34,8 @@ public class SendKeys {
             session.sendKeys("webfolder.io");
             session.sendEnter();
             session.wait(2000);
+            String content = session.getContent();
+            System.out.println(content);
         }
     }
 }

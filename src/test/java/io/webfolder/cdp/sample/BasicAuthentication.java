@@ -61,8 +61,8 @@ public class BasicAuthentication {
                     RequestIntercepted ri = (RequestIntercepted) v;
                     if (ri.getAuthChallenge() != null) {
                         AuthChallengeResponse acr = new AuthChallengeResponse();
-                        acr.setUsername("user");
-                        acr.setPassword("password");
+                        acr.setUsername("86322989@qq.com");
+                        acr.setPassword("alex15426");
                         acr.setResponse(AuthResponse.ProvideCredentials);
                         network.continueInterceptedRequest(ri.getInterceptionId(), null,
                                 null, null,
@@ -74,7 +74,8 @@ public class BasicAuthentication {
                 }
             });
 
-            session.navigate("https://httpbin.org/basic-auth/user/password");
+//            session.navigate("https://httpbin.org/basic-auth/user/password");
+            session.navigate("https://www.zhihu.com/question/following");
             session.wait(1000);
 
             String content = (String) session.evaluate("window.document.body.textContent");
