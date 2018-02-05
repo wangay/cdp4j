@@ -37,14 +37,14 @@ public class CdpPubUtil {
 
     private String content;
 
-    private  boolean go(String url) {
+    private  boolean go(String url,int waitTime) {
         boolean result = false;
         try {
             Launcher launcher = new Launcher();
             try (SessionFactory factory = launcher.launch();
                  Session session = factory.create()) {
                 session.navigate(url);
-                session.waitDocumentReady();
+                session.waitDocumentReady(waitTime);
                 content = session.getContent();
                 if(content!=null  && (content.indexOf("html")>-1|| content.indexOf("meta")>-1)){
                     return true;//说明返回数据了
@@ -57,10 +57,10 @@ public class CdpPubUtil {
         return result;
     }
 
-    public  synchronized String getHtml(String url,int maxTryTimes) {
+    public  synchronized String getHtml(String url,int maxTryTimes,int waitTime) {
         int tryTimes =0;//尝试次数
         while (true){
-            boolean result = go(url);
+            boolean result = go(url,waitTime);
             if(result || tryTimes >=maxTryTimes){
                 //结果正确,或者超过了允许的尝试次数
                 break;

@@ -477,7 +477,7 @@ public interface Selector {
         if (objectId != null) {
             try {
                 //alexTODO 即使注释掉这个,也还是报id找不到的错. #53
-                //getThis().getCommand().getRuntime().releaseObject(objectId);
+                getThis().getCommand().getRuntime().releaseObject(objectId);
             } catch (CdpException e) {
                 throw e;
             }

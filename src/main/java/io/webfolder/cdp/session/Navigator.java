@@ -169,7 +169,7 @@ public interface Navigator {
             title = (String) getThis().getPropertyByObjectId(remoteObject.getObjectId(), "documentElement.outerHTML");
             getThis().logExit("getContent", title);
             //alexTODO  释放对象相关
-           // getThis().releaseObject(remoteObject.getObjectId());
+            getThis().releaseObject(remoteObject.getObjectId());
         } catch (Exception e) {
             //e.printStackTrace();
         }

@@ -26,7 +26,7 @@ public class HelloWorld {
 
 
     public static void main(String[] args) {
-        String html = CdpPubUtil.getInstance().getHtml("http://jandan.net/ooxx/page-401",10);
+        String html = CdpPubUtil.getInstance().getHtml("http://jandan.net/ooxx/page-401",10,15*1000);
         System.out.println(html);
     }
 }
